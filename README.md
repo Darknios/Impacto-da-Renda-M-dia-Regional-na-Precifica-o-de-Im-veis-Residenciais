@@ -1,0 +1,1 @@
+# Impacto-da-Renda-M-dia-Regional-na-Precifica-o-de-Im-veis-Residenciais
