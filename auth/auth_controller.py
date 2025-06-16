@@ -1,13 +1,27 @@
 from fastapi import HTTPException
-from pydantic import BaseModel
+from models.user_model import LoginInput
 from auth.jwt_handler import criar_token
+from config.database import db
+from passlib.context import CryptContext
 
-class LoginInput(BaseModel):
-    username: str
-    password: str
+pwd_context = CryptContext(schemes=["bcrypt"], deprecated="auto")
 
-def autenticar_usuario(data: LoginInput):
-    if data.username == "ivson" and data.password == "123":
-        token = criar_token({"sub": data.username})
-        return {"token": token}
-    raise HTTPException(status_code=401, detail="Usuário ou senha inválidos")
+async def autenticar_usuario(data: LoginInput):
+    usuario = await db.usuarios.find_one({"username": data.username})
+
+    if not usuario:
+        raise HTTPException(status_code=404, detail="Usuário não encontrado")
+
+    try:
+        senha_ok = pwd_context.verify(data.password, usuario["password"])
+    except Exception:
+        raise HTTPException(status_code=500, detail="Erro ao verificar a senha")
+
+    if not senha_ok:
+        raise HTTPException(status_code=401, detail="Senha incorreta")
+
+    token = criar_token({"sub": usuario["username"]})
+    return {
+        "token": token,
+        "username": usuario["username"]
+    }
