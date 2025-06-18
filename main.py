@@ -8,11 +8,11 @@ app = FastAPI(title="API - Impacto da Renda Média na Precificação de Imóveis
 app.middleware("http")(log_para_mongo)
 
 
-# Rotas públicas (ex: login)
+# Rotas públicas 
 app.include_router(auth_routes.router)
 app.include_router(user_routes.router)
 
-# Rotas protegidas (dados, análises, predições)
+# Rotas protegidas
 app.include_router(dados_routes.router, prefix="/dados")
 app.include_router(analise_routes.router, prefix="/analise")
 app.include_router(previsao_routes.router, prefix="/previsao")

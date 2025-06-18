@@ -3,7 +3,7 @@ from datetime import datetime
 from fastapi import Request
 from config.database import db
 
-# Logger de arquivo local
+
 logging.basicConfig(
     filename="logs/app.log",
     level=logging.INFO,
@@ -20,10 +20,10 @@ async def log_para_mongo(request: Request, call_next):
     response = await call_next(request)
     status = response.status_code
 
-    # Registro em arquivo
+    
     logging.info(f"{metodo} {rota} | IP: {ip} | Usuário: {usuario} | Status: {status}")
 
-    # Registro no MongoDB
+    
     log_document = {
         "ip": ip,
         "rota": rota,
