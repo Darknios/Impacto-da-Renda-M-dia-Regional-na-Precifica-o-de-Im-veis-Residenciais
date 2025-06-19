@@ -1,0 +1,8 @@
+scikit-learn
+pandas
+fastapi
+uvicorn
+python-jose[cryptography]
+python-multipart
+joblib
+python-dotenv
